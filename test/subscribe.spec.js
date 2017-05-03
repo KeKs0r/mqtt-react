@@ -49,5 +49,18 @@ describe('Subscribe', (test) => {
         t.true(data[0] === demoMessage);
     })
 
+    test('receives JSON data and parses it', (t) => {
+        var stub = new mockClient();
+        const  SubscribedComponent = subscribe({topic: demoTopic})("div");
+        const demoMessage = {value: 'content'};
+        const mounted = shallow(
+            <SubscribedComponent client={stub} />
+        );
+        stub.publish(demoTopic, JSON.stringify(demoMessage));
+        const data = mounted.first().prop('data');
+        t.truthy(data[0]);
+        t.true(data[0].value === demoMessage.value);
+    })
+
 
 });

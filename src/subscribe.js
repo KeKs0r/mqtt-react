@@ -2,10 +2,21 @@ import {Component, createElement} from "react";
 import PropTypes from "prop-types";
 import omit from "object.omit";
 
+
+function parse(message) {
+    try {
+        const item = JSON.parse(message);
+        return item;
+    } catch (e) {
+        return message.toString();
+    }
+}
+
 function defaultDispatch(topic, message, packet) {
     const { state } = this;
+    const m = parse(message);
     const newData = [
-        message.toString(),
+        m,
         ...state.data
     ];
     this.setState({ data: newData });
