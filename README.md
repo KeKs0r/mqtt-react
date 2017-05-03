@@ -101,3 +101,15 @@ export default subscribe({
   dispatch: customDispatch
 })
 ```
+
+### Contributing
+
+Pull Requests are very welcome!
+
+If you find any issues, please report them via [Github Issues](https://github.com/KeKs0r/mqtt-react/issues)!
+
+### Contributors
+- Marc Höffl [@KeKs0r](https://github.com/KeKs0r)
+
+### License
+(MIT)

@@ -4,10 +4,10 @@ import { shallow } from 'enzyme';
 import Sinon from 'sinon';
 
 import subscribe from '../src/subscribe';
-import events from 'eventemitter';
+import {EventEmitter} from 'events';
 
 
-class mockClient extends events.EventEmitter {
+class mockClient extends EventEmitter {
     subscribe = Sinon.spy();
     publish = Sinon.spy((topic, message) => {
         const bufferMessage = Buffer.from(message);
