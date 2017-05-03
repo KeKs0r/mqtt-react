@@ -1,20 +1,26 @@
-import { Component, PropTypes, createElement } from 'react';
+import {Component, createElement} from "react";
+import PropTypes from "prop-types";
+import omit from "object.omit";
 
-const defaultDispatch = (state, message) => {
+function defaultDispatch(topic, message, packet) {
+    const { state } = this;
     const newData = [
         message.toString(),
-        ...this.state.data
+        ...state.data
     ];
-    this.setState({data: newData});
+    this.setState({ data: newData });
 };
 
 
-export default function subscribe(opts = {dispatch: defaultDispatch}) {
-    const { topic, dispatch } = opts;
-
+export default function subscribe(opts = { dispatch: defaultDispatch }) {
+    const { topic } = opts;
+    const dispatch = (opts.dispatch) ? opts.dispatch : defaultDispatch;
 
     return (TargetComponent) => {
         class MQTTSubscriber extends Component {
+            static propTypes = {
+                client: PropTypes.object
+            }
             static contextTypes = {
                 mqtt: PropTypes.object
             };
@@ -41,7 +47,7 @@ export default function subscribe(opts = {dispatch: defaultDispatch}) {
 
             render() {
                 return createElement(TargetComponent, {
-                    ...this.props,
+                    ...omit(this.props, 'client'),
                     data: this.state.data,
                     mqtt: this.client
                 });
@@ -49,7 +55,7 @@ export default function subscribe(opts = {dispatch: defaultDispatch}) {
 
             subscribe() {
                 this.client.subscribe(topic);
-                this.client.on('message', this.handleMessage);
+                this.client.on('message', dispatch.bind(this));
                 this.setState({ subscribed: true });
             }
 
@@ -59,9 +65,6 @@ export default function subscribe(opts = {dispatch: defaultDispatch}) {
                 //@todo: Unsubscribe handleMessage
             }
 
-            handleMessage = (topic, message, packet) => {
-                dispatch.apply(this, [message, packet]);
-            };
         }
         return MQTTSubscriber;
     }

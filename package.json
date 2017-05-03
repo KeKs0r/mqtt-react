@@ -1,33 +1,51 @@
 {
   "name": "mqtt-react",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Connecting MQQT to React Components",
   "main": "./lib/index.js",
   "scripts": {
     "build:lib": "NODE_ENV=development babel src --out-dir lib",
     "build:umd": "cross-env NODE_ENV=development webpack --config=webpack.config.js src/index.js dist/mqtt-react.js",
     "build": "npm run build:lib && npm run build:umd",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cross-env NODE_ENV=test ava"
   },
   "author": "Marc Höffl <marc.hoeffl@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
+  "ava": {
+    "files": [
+      "./test/*.spec.js"
+    ],
+    "failFast": true,
+    "tap": true,
+    "verbose": true,
+    "require": [
+      "babel-register"
+    ],
+    "babel": "inherit"
+  },
   "dependencies": {
     "babel-loader": "^7.0.0",
     "mqtt": "^2.7.0"
   },
   "peerDependencies": {
-    "react": "^15.4.0",
-    "react-dom": "^15.4.0"
+    "react": "^15.5.0",
+    "react-dom": "^15.5.0"
   },
   "devDependencies": {
+    "ava": "^0.19.1",
+    "ava-spec": "^1.1.0",
     "babel-cli": "^6.24.1",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "cross-env": "^4.0.0",
+    "enzyme": "^2.8.2",
+    "eventemitter": "^0.3.3",
     "mosca": "^2.3.0",
     "prop-types": "^15.5.8",
+    "react-test-renderer": "^15.5.4",
+    "sinon": "^2.2.0",
     "webpack": "^2.4.1"
   }
 }

@@ -1,15 +1,17 @@
-import {PropTypes, Component, createElement, Children} from "react";
-import mqtt from "mqtt";
+import {Component, createElement, Children} from "react";
+import PropTypes from 'prop-types';
+import MQTT from "mqtt";
 
 export default class Connector extends Component {
     static propTypes = {
+        mqqt: PropTypes.object,
         mqttProps: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
         children: PropTypes.element.isRequired,
-        loadingComponent: PropTypes.element,
     };
 
     static childContextTypes = {
         mqtt: PropTypes.object,
+        mqttStatus: PropTypes.string
     };
 
     constructor(props, context) {
@@ -22,14 +24,14 @@ export default class Connector extends Component {
     getChildContext() {
         return {
             mqtt: this.mqtt,
+            mqttStatus: this.state.mqttStatus
         };
     }
 
     componentWillMount() {
-        const { mqttProps } = this.props;
+        const { mqttProps, mqtt } = this.props;
 
-        this.mqtt = mqtt.connect(mqttProps);
-        global._mqtt = this.mqtt;
+        this.mqtt = (mqtt) ? mqtt : MQTT.connect(mqttProps);
 
         this.mqtt.on('connect', this._makeStatusHandler('connected'));
         this.mqtt.on('reconnect', this._makeStatusHandler('reconnect'));
@@ -46,24 +48,17 @@ export default class Connector extends Component {
 
     _makeStatusHandler = (status) => {
         return () => {
-            console.log('status:'+ status);
             this.setState({ mqttStatus: status })
         }
     };
 
     render() {
-        return this.state.mqttStatus === 'connected'
-            ? this.renderConnected()
-            : this.renderLoading();
+        return this.renderConnected();
     }
 
     renderConnected() {
         return Children.only(this.props.children);
     }
 
-    renderLoading() {
-        return this.props.loadingComponent
-            ? createElement(this.props.loadingComponent)
-            : null;
-    }
+
 }
