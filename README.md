@@ -102,6 +102,10 @@ export default subscribe({
 })
 ```
 
+## Credits
+
+Sponsored by <a href="http://nearform.com">nearForm</a>
+
 ### Contributing
 
 Pull Requests are very welcome!

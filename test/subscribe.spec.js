@@ -19,26 +19,26 @@ describe('Subscribe', (test) => {
     const demoTopic = '@test/demo';
 
     test('passes on the client', (t) => {
-        var stub = new mockClient();
+        const stub = new mockClient();
         const  SubscribedComponent = subscribe({topic:demoTopic})("div");
         const mounted = shallow(
             <SubscribedComponent client={stub} />
         );
         t.truthy(mounted.first().prop('mqtt'));
-    })
+    });
 
     test('can subscribe to topic', (t) => {
-        var stub = new mockClient();
+        const stub = new mockClient();
         const  SubscribedComponent = subscribe({topic:demoTopic})("div");
         shallow(
             <SubscribedComponent client={stub} />
         );
         t.true(stub.subscribe.calledWith(demoTopic));
-    })
+    });
 
 
     test('receives data and passes it to component', (t) => {
-        var stub = new mockClient();
+        const stub = new mockClient();
         const  SubscribedComponent = subscribe({topic: demoTopic})("div");
         const demoMessage = 'my message';
         const mounted = shallow(
@@ -47,10 +47,10 @@ describe('Subscribe', (test) => {
         stub.publish(demoTopic, demoMessage);
         const data = mounted.first().prop('data');
         t.true(data[0] === demoMessage);
-    })
+    });
 
     test('receives JSON data and parses it', (t) => {
-        var stub = new mockClient();
+        const stub = new mockClient();
         const  SubscribedComponent = subscribe({topic: demoTopic})("div");
         const demoMessage = {value: 'content'};
         const mounted = shallow(
