@@ -103,7 +103,6 @@ export default subscribe({
 ```
 
 ## Credits
-
 Sponsored by <a href="http://nearform.com">nearForm</a>
 
 ### Contributing
