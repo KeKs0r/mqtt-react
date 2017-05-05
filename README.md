@@ -10,6 +10,9 @@ npm i -S mqtt-react
 ```
 -->
 
+## Demo
+There is a very minimalistic Demo-App: [mqtt-react-demo](https://github.com/KeKs0r/mqtt-react-demo)
+
 ### Usage
 Currently, mqtt-react exports two enhancers.
 Similarly to react-redux, you'll have to first wrap a root component with a
