@@ -44,6 +44,7 @@ export default function subscribe(opts = { dispatch: defaultDispatch }) {
                     subscribed: false,
                     data: [],
                 };
+                this.handler = dispatch.bind(this);
             }
 
 
@@ -66,14 +67,14 @@ export default function subscribe(opts = { dispatch: defaultDispatch }) {
 
             subscribe() {
                 this.client.subscribe(topic);
-                this.client.on('message', dispatch.bind(this));
+                this.client.on('message', this.handler);
                 this.setState({ subscribed: true });
             }
 
             unsubscribe() {
                 this.client.unsubscribe(topic);
                 this.setState({ subscribed: false });
-                //@todo: Unsubscribe handleMessage
+                this.client.removeListener('message', this.handler);
             }
 
         }
