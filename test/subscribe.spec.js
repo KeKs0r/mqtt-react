@@ -1,6 +1,6 @@
 import { describe } from 'ava-spec';
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount, unmount } from 'enzyme';
 import Sinon from 'sinon';
 
 import subscribe from '../src/subscribe';
@@ -13,6 +13,7 @@ class mockClient extends EventEmitter {
         const bufferMessage = Buffer.from(message);
         this.emit('message', topic, bufferMessage);
     });
+    unsubscribe = Sinon.spy();
 }
 
 describe('Subscribe', (test) => {
@@ -60,6 +61,22 @@ describe('Subscribe', (test) => {
         const data = mounted.first().prop('data');
         t.truthy(data[0]);
         t.true(data[0].value === demoMessage.value);
+    })
+
+    test('unsubscribes on unmount', (t) => {
+        const stub = new mockClient();
+        const dispatch = Sinon.spy();
+        const  SubscribedComponent = subscribe({topic: demoTopic, dispatch})("div");
+        const demoMessage = {value: 'content'};
+        const wrapper = shallow(
+            <SubscribedComponent client={stub} />
+        );
+        stub.publish(demoTopic, JSON.stringify(demoMessage));
+        t.is(dispatch.callCount, 1)
+        wrapper.unmount();
+        stub.publish(demoTopic, JSON.stringify(demoMessage));
+        t.is(dispatch.callCount, 1)
+        t.true(stub.unsubscribe.calledWith(demoTopic));
     })
 
 
