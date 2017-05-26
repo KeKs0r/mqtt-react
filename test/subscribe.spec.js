@@ -45,8 +45,8 @@ describe('Subscribe', (test) => {
             <SubscribedComponent client={stub} />
         );
         stub.publish(demoTopic, demoMessage);
-        const data = mounted.first().prop('data');
-        t.true(data[0] === demoMessage);
+        const m = mounted.first().prop('message');
+        t.true(m === demoMessage);
     });
 
     test('receives JSON data and parses it', (t) => {
@@ -57,9 +57,9 @@ describe('Subscribe', (test) => {
             <SubscribedComponent client={stub} />
         );
         stub.publish(demoTopic, JSON.stringify(demoMessage));
-        const data = mounted.first().prop('data');
-        t.truthy(data[0]);
-        t.true(data[0].value === demoMessage.value);
+        const m = mounted.first().prop('message');
+        t.truthy(m);
+        t.true(m.value === demoMessage.value);
     })
 
 
