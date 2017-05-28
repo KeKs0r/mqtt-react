@@ -45,7 +45,7 @@ export default function subscribe(opts = { dispatch: defaultDispatch }) {
                     data: [],
                 };
                 this.handler = dispatch.bind(this)
-                this.client.on('message', dispatch.bind(this));
+                this.client.on('message', this.handler);
             }
 
 
