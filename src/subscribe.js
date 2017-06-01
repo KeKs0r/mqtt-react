@@ -44,6 +44,8 @@ export default function subscribe(opts = { dispatch: defaultDispatch }) {
                     subscribed: false,
                     data: [],
                 };
+                this.handler = dispatch.bind(this)
+                this.client.on('message', this.handler);
             }
 
 
@@ -52,7 +54,6 @@ export default function subscribe(opts = { dispatch: defaultDispatch }) {
             }
 
             componentWillUnmount() {
-                // make sure to dispose all subscriptions
                 this.unsubscribe();
             }
 
@@ -66,14 +67,12 @@ export default function subscribe(opts = { dispatch: defaultDispatch }) {
 
             subscribe() {
                 this.client.subscribe(topic);
-                this.client.on('message', dispatch.bind(this));
                 this.setState({ subscribed: true });
             }
 
             unsubscribe() {
                 this.client.unsubscribe(topic);
                 this.setState({ subscribed: false });
-                //@todo: Unsubscribe handleMessage
             }
 
         }
