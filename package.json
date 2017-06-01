@@ -1,6 +1,6 @@
 {
   "name": "mqtt-react",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Connecting MQQT to React Components",
   "main": "./lib/index.js",
   "scripts": {
@@ -9,9 +9,7 @@
     "build:umd:min": "cross-env NODE_ENV=production webpack --config=webpack.config.js src/index.js dist/mqtt-react.min.js",
     "build": "npm run build:lib && npm run build:umd",
     "test": "cross-env NODE_ENV=test ava",
-    "preversion": "npm test",
-    "version": "npm run generate-changelog && git add CHANGELOG.md",
-    "generate-changelog": "github-changes -n ${npm_package_version} --only-pulls --use-commit-body"
+    "preversion": "npm test"
   },
   "repository": {
     "type": "git",
