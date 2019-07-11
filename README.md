@@ -1,5 +1,8 @@
 [![Build Status](https://travis-ci.org/KeKs0r/mqtt-react.svg?branch=master)](https://travis-ci.org/KeKs0r/mqtt-react)
 
+# Maintenance
+I am not using this library, so it is really hard to maintain it, without knowing the use cases. If someone is interested in taking it over or supporting the maintenance. Please reach out to me. My email is on my profile.
+
 # mqtt-react
 React Container for [mqttjs/MQTT.js](https://github.com/mqttjs/MQTT.js)
 
