@@ -15,11 +15,10 @@ function parse(message) {
 function defaultDispatch(topic, message, packet) {
     const { state } = this;
     const m = parse(message);
-    const newData = [
-        m,
-        ...state.data
-    ];
-    this.setState({ data: newData });
+    
+    this.setState({
+      message: m
+    });
 };
 
 
@@ -42,7 +41,7 @@ export default function subscribe(opts = { dispatch: defaultDispatch }) {
                 this.client = props.client || context.mqtt;
                 this.state = {
                     subscribed: false,
-                    data: [],
+                    message: ''
                 };
                 this.handler = dispatch.bind(this)
                 this.client.on('message', this.handler);
@@ -60,7 +59,7 @@ export default function subscribe(opts = { dispatch: defaultDispatch }) {
             render() {
                 return createElement(TargetComponent, {
                     ...omit(this.props, 'client'),
-                    data: this.state.data,
+                    message: this.state.message,
                     mqtt: this.client
                 });
             }
