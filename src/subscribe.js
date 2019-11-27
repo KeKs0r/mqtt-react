@@ -42,10 +42,16 @@ export default function subscribe(opts = { dispatch: defaultDispatch }) {
                 this.client = props.client || context.mqtt;
                 this.state = {
                     subscribed: false,
+                    subscribedToTopic: '',
                     data: [],
                 };
                 this.handler = dispatch.bind(this)
-                this.client.on('message', this.handler);
+                // this.client.on('message', this.handler);
+                this.client.on('message', (topic, message, packet) => {
+                    if(this.state.subscribedToTopic === topic) {
+                        this.handler(topic, message, packet)
+                    }
+                })
             }
 
 
@@ -67,12 +73,18 @@ export default function subscribe(opts = { dispatch: defaultDispatch }) {
 
             subscribe() {
                 this.client.subscribe(topic);
-                this.setState({ subscribed: true });
+                this.setState({
+                    subscribed: true,
+                    subscribedToTopic: topic
+                });
             }
 
             unsubscribe() {
                 this.client.unsubscribe(topic);
-                this.setState({ subscribed: false });
+                this.setState({
+                    subscribed: false,
+                    subscribedToTopic: ''
+                });
             }
 
         }
