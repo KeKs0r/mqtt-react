@@ -46,9 +46,9 @@ export default function subscribe(opts = { dispatch: defaultDispatch }) {
                     data: [],
                 };
                 this.handler = dispatch.bind(this)
-                // this.client.on('message', this.handler);
                 this.client.on('message', (topic, message, packet) => {
-                    if(this.state.subscribedToTopic === topic) {
+                    let { subscribedToTopic } = this.state
+                    if((Array.isArray(subscribedToTopic) && subscribedToTopic.indexOf(topic) !== -1) || (!Array.isArray(subscribedToTopic) && subscribedToTopic === topic)) {
                         this.handler(topic, message, packet)
                     }
                 })
