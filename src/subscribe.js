@@ -36,6 +36,13 @@ export default function subscribe(opts = { dispatch: defaultDispatch }) {
                 mqtt: PropTypes.object
             };
 
+            updateMessage = (topic, message, packet) => {
+                let { subscribedToTopic } = this.state
+                if((Array.isArray(subscribedToTopic) && subscribedToTopic.indexOf(topic) !== -1) || (!Array.isArray(subscribedToTopic) && subscribedToTopic === topic)) {
+                    this.handler(topic, message, packet)
+                }
+            }
+
             constructor(props, context) {
                 super(props, context);
 
@@ -46,16 +53,11 @@ export default function subscribe(opts = { dispatch: defaultDispatch }) {
                     data: [],
                 };
                 this.handler = dispatch.bind(this)
-                this.client.on('message', (topic, message, packet) => {
-                    let { subscribedToTopic } = this.state
-                    if((Array.isArray(subscribedToTopic) && subscribedToTopic.indexOf(topic) !== -1) || (!Array.isArray(subscribedToTopic) && subscribedToTopic === topic)) {
-                        this.handler(topic, message, packet)
-                    }
-                })
+                this.client.on('message', this.updateMessage)
             }
 
 
-            componentWillMount() {
+            componentDidMount() {
                 this.subscribe();
             }
 
@@ -81,6 +83,7 @@ export default function subscribe(opts = { dispatch: defaultDispatch }) {
 
             unsubscribe() {
                 this.client.unsubscribe(topic);
+                this.client.removeListener('message', this.updateMessage)
                 this.setState({
                     subscribed: false,
                     subscribedToTopic: ''
