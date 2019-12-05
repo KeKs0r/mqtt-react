@@ -82,8 +82,10 @@ export default function subscribe(opts = { dispatch: defaultDispatch }) {
                 // Get the last message when subscribing to a topic that is already
                 // subscribed to. This is needed to show the same information in multiple
                 // elements that subscribe to the same topic.
-                let {message, packet} = ReactMQTT.lastmessage(topic)
-                message && packet && this.handler(topic, message, packet)
+                let lastMessages = ReactMQTT.lastmessage(topic)
+                lastMessages.forEach(lastmessage => {
+                    this.handler(lastmessage.topic, lastmessage.message, lastmessage.packet)
+                });
                 // Let the ReactMQTT helper function know we are subscribing to a topic.
                 // This increases the counter.
                 ReactMQTT.subscribe(topic);

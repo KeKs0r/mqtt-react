@@ -26,23 +26,26 @@ const ReactMQTT = {
     return unsubscribeFromTopics
   },
   lastmessage: (topic, message, packet) => {
-    if(message && packet) {
-      // Set the last message
-      _lastMessage[topic] = {
-        message: message,
-        packet: packet
+    let result = []
+    if(!Array.isArray(topic)) topic = [topic]
+    topic.forEach(t => {
+      if(message && packet) {
+        // Set the last message
+        _lastMessage[t] = {
+          message: message,
+          packet: packet
+        }
+      } else if(_lastMessage[t]) {
+        // Get the last message
+        result.push({
+          topic: t,
+          message: _lastMessage[t].message,
+          packet: _lastMessage[t].packet
+        })
       }
-    } else if(_lastMessage[topic]) {
-      // Get the last message
-      return {
-        topic: topic,
-        message: _lastMessage[topic].message,
-        packet: _lastMessage[topic].packet
-      }
-    } else {
-      // Trying to get a non-existing message. Return empty object.
-      return {}
-    }
+    });
+
+    return result
   }
 }
 
