@@ -1,7 +1,7 @@
 import {Component, createElement} from "react";
 import PropTypes from "prop-types";
 import omit from "object.omit";
-import TopicCounter from "./topic-counter"
+import ReactMQTT from "./react-mqtt"
 
 
 function parse(message) {
@@ -41,6 +41,7 @@ export default function subscribe(opts = { dispatch: defaultDispatch }) {
                 let { subscribedToTopic } = this.state
                 if((Array.isArray(subscribedToTopic) && subscribedToTopic.indexOf(topic) !== -1) || (!Array.isArray(subscribedToTopic) && subscribedToTopic === topic)) {
                     if(debug) console.info('Message for : ' + topic)
+                    ReactMQTT.lastmessage(topic, message, packet)
                     this.handler(topic, message, packet)
                 }
             }
@@ -78,7 +79,9 @@ export default function subscribe(opts = { dispatch: defaultDispatch }) {
             }
 
             subscribe() {
-                TopicCounter.subscribe(topic);
+                let {message, packet} = ReactMQTT.lastmessage(topic)
+                message && packet && this.handler(topic, message, packet)
+                ReactMQTT.subscribe(topic);
                 this.client.subscribe(topic);
                 this.setState({
                     subscribed: true,
@@ -88,7 +91,7 @@ export default function subscribe(opts = { dispatch: defaultDispatch }) {
 
             unsubscribe() {
                 let unsubscribeFrom = []
-                if(unsubscribeFrom = TopicCounter.unsubscribe(topic)) {
+                if(unsubscribeFrom = ReactMQTT.unsubscribe(topic)) {
                     unsubscribeFrom.length > 0 && this.client.unsubscribe(unsubscribeFrom);
                 }
                 this.client.removeListener('message', this.updateMessage)
