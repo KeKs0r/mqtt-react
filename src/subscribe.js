@@ -1,6 +1,7 @@
 import {Component, createElement} from "react";
 import PropTypes from "prop-types";
 import omit from "object.omit";
+import TopicCounter from "./topic-counter"
 
 
 function parse(message) {
@@ -24,7 +25,7 @@ function defaultDispatch(topic, message, packet) {
 
 
 export default function subscribe(opts = { dispatch: defaultDispatch }) {
-    const { topic } = opts;
+    const { topic, debug } = opts;
     const dispatch = (opts.dispatch) ? opts.dispatch : defaultDispatch;
 
     return (TargetComponent) => {
@@ -39,6 +40,7 @@ export default function subscribe(opts = { dispatch: defaultDispatch }) {
             updateMessage = (topic, message, packet) => {
                 let { subscribedToTopic } = this.state
                 if((Array.isArray(subscribedToTopic) && subscribedToTopic.indexOf(topic) !== -1) || (!Array.isArray(subscribedToTopic) && subscribedToTopic === topic)) {
+                    if(debug) console.info('Message for : ' + topic)
                     this.handler(topic, message, packet)
                 }
             }
@@ -58,10 +60,12 @@ export default function subscribe(opts = { dispatch: defaultDispatch }) {
 
 
             componentDidMount() {
+                if(debug) console.info('Subscribed to : ' + topic)
                 this.subscribe();
             }
 
             componentWillUnmount() {
+                if(debug) console.info('Unsubscribed from : ' + topic)
                 this.unsubscribe();
             }
 
@@ -74,6 +78,7 @@ export default function subscribe(opts = { dispatch: defaultDispatch }) {
             }
 
             subscribe() {
+                TopicCounter.subscribe(topic);
                 this.client.subscribe(topic);
                 this.setState({
                     subscribed: true,
@@ -82,7 +87,10 @@ export default function subscribe(opts = { dispatch: defaultDispatch }) {
             }
 
             unsubscribe() {
-                this.client.unsubscribe(topic);
+                let unsubscribeFrom = []
+                if(unsubscribeFrom = TopicCounter.unsubscribe(topic)) {
+                    unsubscribeFrom.length > 0 && this.client.unsubscribe(unsubscribeFrom);
+                }
                 this.client.removeListener('message', this.updateMessage)
                 this.setState({
                     subscribed: false,
