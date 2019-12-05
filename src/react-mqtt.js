@@ -40,11 +40,10 @@ const ReactMQTT = {
         packet: _lastMessage[topic].packet
       }
     } else {
+      // Trying to get a non-existing message. Return empty object.
       return {}
     }
   }
-  // Make a last message saver. This is needed for saving the last message
-  // received. This way the last message can be set again when no resubscription occurred.
 }
 
 Object.freeze(ReactMQTT);

@@ -79,8 +79,13 @@ export default function subscribe(opts = { dispatch: defaultDispatch }) {
             }
 
             subscribe() {
+                // Get the last message when subscribing to a topic that is already
+                // subscribed to. This is needed to show the same information in multiple
+                // elements that subscribe to the same topic.
                 let {message, packet} = ReactMQTT.lastmessage(topic)
                 message && packet && this.handler(topic, message, packet)
+                // Let the ReactMQTT helper function know we are subscribing to a topic.
+                // This increases the counter.
                 ReactMQTT.subscribe(topic);
                 this.client.subscribe(topic);
                 this.setState({
@@ -91,6 +96,9 @@ export default function subscribe(opts = { dispatch: defaultDispatch }) {
 
             unsubscribe() {
                 let unsubscribeFrom = []
+                // Let the ReactMQTT helper know we want to unsubscribe from topic. This
+                // will decrease a counter for this topic. When the counter reaches 0 the
+                // client.unsubscribe function will be called with this topic.
                 if(unsubscribeFrom = ReactMQTT.unsubscribe(topic)) {
                     unsubscribeFrom.length > 0 && this.client.unsubscribe(unsubscribeFrom);
                 }
