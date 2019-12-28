@@ -38,8 +38,6 @@ export default class Connector extends Component {
         this.mqtt.on('close',  this._makeStatusHandler('closed'));
         this.mqtt.on('offline', this._makeStatusHandler('offline'));
         this.mqtt.on('error', console.error);
-
-
     }
 
     componentWillUnmount(){
@@ -59,6 +57,4 @@ export default class Connector extends Component {
     renderConnected() {
         return Children.only(this.props.children);
     }
-
-
 }
