@@ -4,7 +4,6 @@ import {shallow} from "enzyme";
 import {EventEmitter} from "events";
 import Connector from "../src/connector";
 
-
 describe('Connector', (test) => {
     const DIV_ID = 'content';
     test('should render children', (t) => {
@@ -16,5 +15,4 @@ describe('Connector', (test) => {
         )
         t.true(mounted.find(`div#${DIV_ID}`).length === 1);
     })
-
 });

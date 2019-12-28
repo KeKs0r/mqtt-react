@@ -2,7 +2,6 @@ import {Component, createElement} from "react";
 import PropTypes from "prop-types";
 import omit from "object.omit";
 
-
 function parse(message) {
     try {
         const item = JSON.parse(message);
@@ -21,7 +20,6 @@ function defaultDispatch(topic, message, packet) {
     ];
     this.setState({ data: newData });
 };
-
 
 export default function subscribe(opts = { dispatch: defaultDispatch }) {
     const { topic } = opts;
@@ -47,7 +45,6 @@ export default function subscribe(opts = { dispatch: defaultDispatch }) {
                 this.handler = dispatch.bind(this)
                 this.client.on('message', this.handler);
             }
-
 
             componentWillMount() {
                 this.subscribe();

@@ -1,6 +1,6 @@
 {
   "name": "mqtt-react",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Connecting MQQT to React Components",
   "main": "./lib/index.js",
   "scripts": {
@@ -33,12 +33,13 @@
     "babel": "inherit"
   },
   "dependencies": {
-    "mqtt": "^2.7.0"
+    "mqtt": "^3.0.0",
+    "object.omit": "^3.0.0"
   },
   "peerDependencies": {
+    "prop-types": "^15.5.8",
     "react": "^15.5.0",
-    "react-dom": "^15.5.0",
-    "prop-types": "^15.5.8"
+    "react-dom": "^15.5.0"
   },
   "devDependencies": {
     "ava": "^0.19.1",
@@ -51,9 +52,9 @@
     "babel-preset-stage-0": "^6.24.1",
     "cross-env": "^4.0.0",
     "enzyme": "^2.8.2",
+    "prop-types": "^15.5.8",
     "react": "^15.5.0",
     "react-dom": "^15.5.0",
-    "prop-types": "^15.5.8",
     "react-test-renderer": "^15.5.4",
     "sinon": "^2.2.0",
     "webpack": "^2.4.1"

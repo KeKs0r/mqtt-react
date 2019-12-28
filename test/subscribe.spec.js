@@ -6,7 +6,6 @@ import Sinon from 'sinon';
 import subscribe from '../src/subscribe';
 import {EventEmitter} from 'events';
 
-
 class mockClient extends EventEmitter {
     subscribe = Sinon.spy();
     publish = Sinon.spy((topic, message) => {
@@ -61,6 +60,4 @@ describe('Subscribe', (test) => {
         t.truthy(data[0]);
         t.true(data[0].value === demoMessage.value);
     })
-
-
 });
